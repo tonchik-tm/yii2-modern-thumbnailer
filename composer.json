@@ -1,0 +1,23 @@
+{
+    "name": "tonchik-tm/yii2-modern-thumbnailer",
+    "description": "Yii2 helper for creating and caching thumbnails on real time with WEBP support",
+    "type": "yii2-extension",
+    "keywords": ["yii2", "thumbnail", "webp"],
+    "license": "MIT",
+    "require": {
+        "yiisoft/yii2-imagine": "^2.0",
+        "yiisoft/yii2-httpclient": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "tonchik-tm",
+            "email": "nian1981@mail.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "TonchikTm\\Yii2Thumb\\": ""
+        }
+    }
+}
