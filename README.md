@@ -1,5 +1,10 @@
 # Modern Thumbnail Image Helper for Yii2
 
+[![Latest Stable Version](https://poser.pugx.org/tonchik-tm/yii2-modern-thumbnailer/v/stable?format=flat-square)](https://packagist.org/packages/tonchik-tm/yii2-modern-thumbnailer)
+[![Total Downloads](https://poser.pugx.org/tonchik-tm/yii2-modern-thumbnailer/downloads?format=flat-square)](https://packagist.org/packages/tonchik-tm/yii2-modern-thumbnailer)
+[![Latest Unstable Version](https://poser.pugx.org/tonchik-tm/yii2-modern-thumbnailer/v/unstable?format=flat-square)](https://packagist.org/packages/tonchik-tm/yii2-modern-thumbnailer)
+[![License](https://poser.pugx.org/tonchik-tm/yii2-modern-thumbnailer/license?format=flat-square)](https://packagist.org/packages/tonchik-tm/yii2-modern-thumbnailer)
+
 Yii2 helper for creating and caching webp thumbnails on real time.
 
 Installation
@@ -14,7 +19,7 @@ php composer.phar require "tonchik-tm/yii2-modern-thumbnailer" "*"
 or add
 
 ```json
-"tonchik-tm/yii2-modern-thumbnailer" : "*"
+"tonchik-tm/yii2-modern-thumbnailer": "*"
 ```
 
 to the require section of your application's `composer.json` file.
