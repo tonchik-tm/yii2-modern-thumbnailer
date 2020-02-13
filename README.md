@@ -50,6 +50,15 @@ echo ImageThumb::thumbPicture(
 );
 ```
 
+In the output we will get something like this code:
+
+```html
+<picture data-cache="hit">
+    <source srcset="/assets/thumbnails/example.png.webp" type="image/webp" />
+    <img src="/assets/thumbnails/example.png" />
+</picture>
+```
+
 For other functions please see the source code.
 
 The package is in the process of developing
