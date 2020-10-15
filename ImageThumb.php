@@ -9,6 +9,7 @@ use Imagine\Exception\RuntimeException;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ManipulatorInterface;
+use Imagine\Image\Point;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
@@ -26,6 +27,7 @@ class ImageThumb
     const THUMBNAIL_OUTBOUND = ManipulatorInterface::THUMBNAIL_OUTBOUND;
     const THUMBNAIL_INSET = ManipulatorInterface::THUMBNAIL_INSET;
     const THUMBNAIL_INSET_BOX = 'inset_box';
+    const THUMBNAIL_CROP = 'crop_box';
     const QUALITY = 60;
     const MKDIR_MODE = 0755;
 
@@ -74,6 +76,7 @@ class ImageThumb
             'format'    => null, // format finally file
             'mode'      => self::THUMBNAIL_OUTBOUND, // mode of resizing original image to use in case both width and height specified
             'quality'   => null,
+            'crop' => null,
             'cacheMode' => self::CHECK_REM_MODE_NONE, // check file version on remote server
         ], $options);
 
@@ -83,6 +86,8 @@ class ImageThumb
         if (\preg_match('/^https?:\/\//', $filename)) {
             $fileNameIsUrl = true;
             $commonCacheData = $filename . $width . $height . $o['mode'];
+            if (!empty($o['crop']['coord'])) $commonCacheData .= implode('', $o['crop']['coord']);
+
             switch ($o['cacheMode']) {
                 case self::CHECK_REM_MODE_NONE:
                     $thumbnailFileName = \md5($commonCacheData);
@@ -103,7 +108,9 @@ class ImageThumb
             if (!\is_file($filename)) {
                 throw new FileNotFoundException("File {$filename} doesn't exist");
             }
-            $thumbnailFileName = \md5($filename . $width . $height . $o['mode'] . \filemtime($filename));
+            $commonCacheData = $filename . $width . $height . $o['mode'];
+            if (!empty($o['crop']['coord'])) $commonCacheData .= implode('', $o['crop']['coord']);
+            $thumbnailFileName = \md5($commonCacheData . \filemtime($filename));
         }
 
         $cachePath = Yii::getAlias('@webroot/' . static::$cacheAlias);
@@ -132,6 +139,14 @@ class ImageThumb
 
         if ($o['mode'] === self::THUMBNAIL_INSET_BOX) {
             $image = $image->thumbnail(new Box($width, $height), ManipulatorInterface::THUMBNAIL_INSET);
+        } elseif ($o['mode'] === self::THUMBNAIL_CROP) {
+            $s = $o['crop'];
+            if (!empty($s['source'])) {
+                $ratio = $s['ratio'] ?? 1;
+                $image = $image->resize(new Box($s['source'][0]*$ratio, $s['source'][1]*$ratio));
+            }
+            $image = $image->crop(new Point($s['coord']['x']*$ratio, $s['coord']['y']*$ratio), new Box($s['coord']['w']*$ratio, $s['coord']['h']*$ratio));
+            $image->thumbnail(new Box($width, $height), ManipulatorInterface::THUMBNAIL_INSET);
         } else {
             $image = Image::thumbnail($image, $width, $height, $o['mode']);
         }
@@ -234,8 +249,8 @@ class ImageThumb
 
         return
             Html::beginTag('picture', $pictureOptions) . "\n\t" .
-                self::thumbSource($filename, $width, $height, $sourceOptions) . "\n\t" .
-                self::thumbImg($filename, $width, $height, $oImg) . "\n" .
+            self::thumbSource($filename, $width, $height, $sourceOptions) . "\n\t" .
+            self::thumbImg($filename, $width, $height, $oImg) . "\n" .
             Html::endTag('picture');
     }
 

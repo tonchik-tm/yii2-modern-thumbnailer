@@ -1,4 +1,6 @@
 # IntelliJ project files
 .idea
+/lsp
+/tests
 /vendor
 /composer.lock

@@ -31,7 +31,7 @@ For example:
 ```php
 use TonchikTm\Yii2Thumb\ImageThumb;
 
-$mode    = Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+$mode    = ImageThumb::THUMBNAIL_INSET;
 $options = [
     'source' => [
         'format' => 'webp',
@@ -57,6 +57,25 @@ In the output we will get something like this code:
     <source srcset="/assets/thumbnails/example.png.webp" type="image/webp" />
     <img src="/assets/thumbnails/example.png" />
 </picture>
+```
+
+If you use [Jcrop](http://deepliquid.com/content/Jcrop.html), you can use mode `ImageThumb::THUMBNAIL_CROP`:
+
+```php
+<?php
+use TonchikTm\Yii2Thumb\ImageThumb;
+
+$crop = [
+    'source' => [450, 450], // Size source image where create crop coordinates
+    'coord' => ['x'=>100,'y'=>50,'x2'=>350,'y2'=>200,'w'=>250,'h'=>150,], // data from jCrop
+];
+$options = [
+    'mode' => ImageThumb::THUMBNAIL_CROP,
+    'crop' => $crop,
+];
+?>
+<hr>
+<?= ImageThumb::thumbImg(Yii::getAlias('@webroot/assets/example.png'), 250, 150, $options) . "\n"; ?>
 ```
 
 For other functions please see the source code.
